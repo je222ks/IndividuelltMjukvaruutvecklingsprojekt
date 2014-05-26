@@ -56,18 +56,48 @@ var Background = function () {
             items.push(tempRow);
         }
         
-        
-        var tRow;
-        var tCol;
         // places trees
+        var randomRow;
+        var randomCol; 
         for (var t = 0; t < treeMax; t++){
             var treeLocFound = false;
             while(!treeLocFound){
-                tRow = (Math.random()*20) | 0;
-                tCol = (Math.random()*30) | 0;
-                if (playField[tRow][tCol]===groundTile){
-                    playField[tRow][tCol] = treeTile;
+                randomRow = (Math.random()*20) | 0; // according to this article http://blog.sklambert.com/create-a-canvas-tileset-background/#disqus_thread, the "or" operation is faster then using math.floor here, and therefor im using it.
+                randomCol = (Math.random()*30) | 0;
+                if (playField[randomRow][randomCol]===groundTile){
+                    playField[randomRow][randomCol] = treeTile;
                     treeLocFound = true;
+                }
+            }
+        }
+        
+        // places the player
+        var playerLocFound = false;
+        while(!playerLocFound){
+            randomRow = (Math.random()*20) | 0;
+            randomCol = (Math.random()*30) | 0;
+            if (playField[randomRow][randomCol]===groundTile && items[randomRow][randomCol]===0){
+                playerLocFound = true;
+                // sets some attributes for the player object
+                Player.colPos = randomCol;
+                Player.rowPos = randomRow;
+                Player.x = Player.colPos*20;
+                Player.y = Player.rowPos*20;
+                // occupies the position in the item-arrray
+                items[randomRow][randomCol];
+            }
+            
+        }
+        
+        // places the question triggers
+        for (var i = 0; i < questionMax; i++){
+            var questionLocFound = false;
+            while(!questionLocFound){
+                randomRow = (Math.random()*20) | 0; 
+                randomCol = (Math.random()*30) | 0;
+                if (playField[randomRow][randomCol]===groundTile && items[randomRow][randomCol]===0){
+                    playField[randomRow][randomCol] = questionTile;
+                    questionLocFound = true;
                 }
             }
         }
