@@ -7,6 +7,9 @@ var Background = function () {
     var rows = 20;
     var tileSize = 20;
     
+    var tileSheet = new Image();
+    tileSheet.src = "../img/tiles.png";
+    
     // sets the canvas properly
     canvas.width = tileSize*cols;
     canvas.height = tileSize*rows;
@@ -14,12 +17,15 @@ var Background = function () {
     // playfield and item-collision arrays
     var playField = [];
     var items = [];
+    // stores "movements"
+    var keyReads = [];
     
     // tiles
-    var playerTiles = [2, 3];
+    var playerTile = [2, 3];
     var groundTile = 0;
     var treeTile = 1;
     var questionTile = 4;
+    var transparentTile = 5;
     
 
     // max limits
@@ -29,6 +35,7 @@ var Background = function () {
     
     createPlayField();
     renderMap();
+    renderPlayer();
     
     function createPlayField () {   
         var treeCount = 0;
@@ -82,9 +89,12 @@ var Background = function () {
                 Player.colPos = randomCol;
                 Player.rowPos = randomRow;
                 Player.x = Player.colPos*20;
-                Player.y = Player.rowPos*20;
+                Player.y = Player.rowPos*20; 
+                
+                // temporary since the seperate method wont render it...
+                playField[randomRow][randomCol] = playerTile[1];
                 // occupies the position in the item-arrray
-                items[randomRow][randomCol];
+                items[randomRow][randomCol] = 1;
             }
             
         }
@@ -102,29 +112,9 @@ var Background = function () {
             }
         }
         
-    };
-    
-
-    
+    };  
     
     function renderMap () {
-        var tileSheet = new Image();
-        tileSheet.src = "../img/tiles.png";
-        
-        // render bg
-        /*for (var r = 0; r < 20; r++){
-            for (var c = 0; c < 30; c++){
-                var sourceX = Math.floor((playField[ r ][ c ]) % 5) * 20;
-                var sourceY = Math.floor((playField[ r ][ c ]) / 5) * 20;
-                
-                
-                if (playField[ r ][ c ] != groundTile){
-                    ctx.drawImage(tileSheet, 0, 0, 20, 20, c * 20, r * 20, 20, 20);
-                }
-                
-                ctx.drawImage(tileSheet, sourceX * 20, sourceY * 20, 20, 20, c * 20, r * 20, 20, 20);
-            }
-        }*/
         var tilesetImage = new Image();
         tilesetImage.src = "../img/tiles.png";
         tilesetImage.onload = drawImage;
@@ -138,11 +128,67 @@ var Background = function () {
                  var tile = playField[ r ][ c ];
                  var tileRow = (tile / imageNumTiles) | 0;
                  var tileCol = (tile % imageNumTiles) | 0;
+                  
+                  // renders ground in the background in case its something with a transparent bg
+                  if (playField[ r ][ c ] != groundTile){
+                      ctx.drawImage(tilesetImage, 0, 0, 20, 20, c * 20, r * 20, 20, 20);
+                  }
+                  
                  ctx.drawImage(tilesetImage, (tileCol * tileSize), (tileRow * tileSize), tileSize, tileSize, (c * tileSize), (r * tileSize), tileSize, tileSize); 
               }; 
            };
         };
     }; 
+    
+/*    function renderPlayer () {
+        var tilesetImage = new Image();
+        tilesetImage.src = "../img/tiles.png";
+        tilesetImage.onload = drawImage;
+        
+        function drawImage () {
+
+            
+            var sourceX = (playerTile[Player.currentTile] % 5) | 0;
+            var sourceY = (playerTile[Player.currentTile] / 5) | 0;
+            
+            ctx.fillStyle = "#00ff00"
+            ctx.fillRect(sourceX, sourceY, 20, 20);
+        }
+    }*/
+
+    // reads the keys pressed, arrows or wasd
+    function readMovement () {
+        if (keyReads[38]==true || keyReads[87]==true){
+            // up
+            if (verifyMovement(-1, 0, Player)){
+                confirmMovement();
+            }
+        } else if (keyReads[40]==true || keyReads[83]==true){
+            // down
+            if (verifyMovement(1, 0, Player)){
+                confirmMovement();
+            }
+        } else if (keyReads[37]==true || keyReads[65]==true){
+            // left
+            if (verifyMovement(0, -1, Player)){
+                confirmMovement();
+            }
+        } else if (keyReads[39]==true || keyReads[68]==true){
+            // right
+            if (verifyMovement(0, 1, Player)){
+                confirmMovement();
+            }
+        }
+    };
+    
+    function verifyMovement (incRow, incCol, obj) {
+        
+    };
+    
+    function confirmMovement () {
+        
+    };
+    
 };
           
 window.onload = Background;
