@@ -142,7 +142,7 @@ var Game = function () {
         var playField = [];
         var items = [];
         createPlayField();
-        renderMap();
+        renderPlayField();
         
         switchGameState(GameStates.AwaitMove);
     };
@@ -160,6 +160,12 @@ var Game = function () {
         ctx.fillStyle = "#cddba0";
         ctx.font = "20px Arial";
         ctx.textBaseline = "top";
+    };
+    
+    function renderPlayField () {
+        fillBg();
+        renderMap();
+        renderPlayer();
     };
     
     function createPlayField () {   
@@ -217,7 +223,7 @@ var Game = function () {
                 Player.y = Player.rowPos*20; 
                 
                 // temporary since the seperate method wont render it...
-                playField[randomRow][randomCol] = playerTile[1];
+//                playField[randomRow][randomCol] = playerTile[1];
                 // occupies the position in the item-arrray
                 items[randomRow][randomCol] = 1;
             }
@@ -240,9 +246,9 @@ var Game = function () {
     };  
     
     function renderMap () {
-        /*var tilesetImage = new Image();
+        var tilesetImage = new Image();
         tilesetImage.src = "../img/tiles.png";
-        tilesetImage.onload = drawImage;*/
+        tilesetImage.onload = drawImage;
         var tileSize = 20;       // The size of a tile (20×20)
         var rowTileCount = 20;   // The number of tiles in a row 
         var colTileCount = 30;   // The number of tiles in a column
@@ -266,17 +272,23 @@ var Game = function () {
     }; 
     
     function renderPlayer () {
-       /* var tilesetImage = new Image();
+        var tilesetImage = new Image();
         tilesetImage.src = "../img/tiles.png";
-        tilesetImage.onload = drawImage;*/
+        tilesetImage.onload = drawImage;
+        
+        ctx.save();
+        
+        ctx.setTransform(1,0,0,1,0,0);
+        ctx.translate(Player.colPos+10, Player.rowPos+10);
         
         function drawImage () {
-            var sourceX = (playerTile[Player.currentTile] % 5) | 0; // something aint right.... the array should be a correct number (0)...
-            var sourceY = (playerTile[Player.currentTile] / 5) | 0;
+            var sourceX = Math.floor(playerTile[Player.currentTile] % 5) * 20;
+            var sourceY = Math.floor(playerTile[Player.currentTile] / 5) * 20;
             
-//            ctx.fillStyle = "#00ff00"
-            ctx.fillRect(tileSheet, sourceX, sourceY, 20, 20); 
+            ctx.drawImage(tilesetImage, sourceX, sourceY, 20, 20, Player.colPos * 20, Player.rowPos * 20, 20, 20); 
         };
+        
+        ctx.restore();
     };
 
     // reads the keys pressed, arrows or wasd
@@ -327,7 +339,7 @@ var Game = function () {
     function confirmMovement () {
         Player.destinationX = Player.nextColPos * 20;
         Player.destinationY = Player.nextRowPos * 20;
-        animatePlayer();
+        switchGameState(GameStates.AnimateMove);
     };
     
     function animatePlayer () {
@@ -335,14 +347,14 @@ var Game = function () {
         Player.y += Player.deltaY*Player.speed;
         Player.currentTile++;
         
-        if (Player.currentTile == playerTile.length){
+        if (Player.currentTile === playerTile.length){
             Player.currentTile = 0;
         }
         
         renderMap();
         
         if (Player.x===Player.destinationX && Player.y===Player.destinationY){
-            readMovement();
+            switchGameState(GameStates.AwaitMove);
         }
     };
     
