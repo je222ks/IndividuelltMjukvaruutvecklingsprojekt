@@ -1,14 +1,17 @@
 "use strict";
 
-var Background = function () {
+var Background = function () {    
     var canvas = document.getElementById("gamecont");
     var ctx = canvas.getContext("2d");
     var cols = 30;
     var rows = 20;
     var tileSize = 20;
     
-    var tileSheet = new Image();
-    tileSheet.src = "../img/tiles.png";
+    var tileSheet = null;
+    
+    // loading assets
+    var loadingCount = 0;
+    var itemsLeftToLoad = 1;
     
     // sets the canvas properly
     canvas.width = tileSize*cols;
@@ -33,9 +36,82 @@ var Background = function () {
     var playerMax = 1;
     var questionMax = 5;
     
-    createPlayField();
+    document.body.onkeydown = function (e) {
+        e = e?e:window.event;
+        keyReads[e.keyCode] = true;
+    }
+    
+    document.body.onkeyup = function(e) {
+      e = e?e:window.event;
+      keyReads[e.keyCode] = false;
+    };
+    
+    
+    // puts the app in various states
+    var gameStateInit = 0;
+    var gameStateAwaitLoad = 10;
+    var gameStateTitle = 20;
+    var gameStateNew = 30;
+    var gameStateAwaitMove = 40;
+    var gameStateAnimateMove = 50;
+    var gameStateEvaluateMove = 60;
+    
+    
+    var currentGameState = 0;
+    var currentGameStateFunc = null;
+    
+    
+    function runGame () {
+        currentGameStateFunc();
+    };
+    
+    
+    function switchGameState (newState) {
+        currentGameState = newState;
+        switch(currentGameState) {
+            case gameStateInit :
+                currentGameStateFunc = ;
+                break;
+            case gameStateAwaitLoad :
+                currentGameStateFunc = ;
+                break;
+            case gameStateTitle :
+                currentGameStateFunc = ;
+                break;
+            case gameStateNew :
+                currentGameStateFunc = ;
+                break;
+            case gameStateAwaitMove :
+                currentGameStateFunc = ;
+                break;
+            case gameStateAnimateMove :
+                currentGameStateFunc = ;
+                break;
+            case gameStateEvaluateMove :
+                currentGameStateFunc = ;
+                break;
+        }
+    };
+    
+    
+    // calls functions for testing purposes.
+    /*createPlayField();
     renderMap();
     renderPlayer();
+    readMovement();*/
+    
+    function gameStateInit () {
+        tileSheet = new Image();
+        tileSheet.src = "../img/tiles.png";
+        tileSheet.onload = itemLoad;
+    };
+        
+    function itemLoad () {
+        loadingCount++;
+        if (loadingCount >= itemsLeftToLoad) {
+            switchGameState(gameStateTitle);
+        }
+    };
     
     function createPlayField () {   
         var treeCount = 0;
@@ -140,21 +216,19 @@ var Background = function () {
         };
     }; 
     
-/*    function renderPlayer () {
+    function renderPlayer () {
         var tilesetImage = new Image();
         tilesetImage.src = "../img/tiles.png";
         tilesetImage.onload = drawImage;
         
         function drawImage () {
-
-            
-            var sourceX = (playerTile[Player.currentTile] % 5) | 0;
+            var sourceX = (playerTile[Player.currentTile] % 5) | 0; // something aint right.... the array should be a correct number (0)...
             var sourceY = (playerTile[Player.currentTile] / 5) | 0;
             
-            ctx.fillStyle = "#00ff00"
-            ctx.fillRect(sourceX, sourceY, 20, 20);
-        }
-    }*/
+//            ctx.fillStyle = "#00ff00"
+            ctx.fillRect(tilesetImage, sourceX, sourceY, 20, 20); 
+        };
+    };
 
     // reads the keys pressed, arrows or wasd
     function readMovement () {
@@ -182,13 +256,45 @@ var Background = function () {
     };
     
     function verifyMovement (incRow, incCol, obj) {
+        obj.nextRowPos = obj.rowPos + incRow;
+        obj.nextColPos = obj.colPos + incCol;
         
+        // "sets borders"
+        if (obj.nextColPos >= 0 && obj.nextColPos < 30 && obj.nextRowPos >= 0 && obj.nextRowPos < 20){
+            obj.deltaX = incCol;
+            obj.deltaY = incRow;
+            
+            // add "rotation" at least to some degree, 0 and 180 minimum for movement to the right and left.
+            
+            return true;
+        } else {
+            obj.nextColPos = obj.colPos;
+            obj.nextRowPos = obj.rowPos;
+            
+            return false;
+        };
     };
     
     function confirmMovement () {
+        Player.destinationX = Player.nextColPos * 20;
+        Player.destinationY = Player.nextRowPos * 20;
+        animatePlayer();
+    };
+    
+    function animatePlayer () {
+        Player.x += Player.deltaX*Player.speed;
+        Player.y += Player.deltaY*Player.speed;
+        Player.currentTile++;
         
+        if (Player.currentTile == playerTile.length){
+            Player.currentTile = 0;
+        }
+        
+        renderMap();
+        
+        if (Player.x===Player.destinationX && Player.y===Player.destinationY){
+            readMovement();
+        }
     };
     
 };
-          
-window.onload = Background;
