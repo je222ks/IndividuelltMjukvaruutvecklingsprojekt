@@ -1,13 +1,13 @@
 "use strict";
 
-var Background = function () {    
+var Game = function () {    
     var canvas = document.getElementById("gamecont");
     var ctx = canvas.getContext("2d");
     var cols = 30;
     var rows = 20;
     var tileSize = 20;
     
-    var tileSheet = null;
+    var tileSheet;
     
     // loading assets
     var loadingCount = 0;
@@ -30,32 +30,33 @@ var Background = function () {
     var questionTile = 4;
     var transparentTile = 5;
     
-
     // max limits
     var treeMax = 100;
     var playerMax = 1;
     var questionMax = 5;
     
-    document.body.onkeydown = function (e) {
-        e = e?e:window.event;
-        keyReads[e.keyCode] = true;
-    }
-    
-    document.body.onkeyup = function(e) {
-      e = e?e:window.event;
-      keyReads[e.keyCode] = false;
-    };
+    // screens 
+    var screenStart = false;
     
     
     // puts the app in various states
-    var gameStateInit = 0;
+/*    var gameStateInit = 0;
     var gameStateAwaitLoad = 10;
     var gameStateTitle = 20;
     var gameStateNew = 30;
     var gameStateAwaitMove = 40;
     var gameStateAnimateMove = 50;
-    var gameStateEvaluateMove = 60;
+    var gameStateEvaluateMove = 60;*/
     
+    var GameStates = {
+        Init : 0,
+        AwaitLoad : 10,
+        Title : 20,
+        New : 30,
+        AwaitMove : 40,
+        AnimateMove : 50,
+        EvaluateMove : 60
+    };
     
     var currentGameState = 0;
     var currentGameStateFunc = null;
@@ -66,29 +67,29 @@ var Background = function () {
     };
     
     
-    function switchGameState (newState) {
-        currentGameState = newState;
+    function switchGameState (state) {
+        currentGameState = state;
         switch(currentGameState) {
-            case gameStateInit :
-                currentGameStateFunc = ;
+            case GameStates.Init :
+                currentGameStateFunc = initState;
                 break;
-            case gameStateAwaitLoad :
-                currentGameStateFunc = ;
+            case GameStates.AwaitLoad :
+                currentGameStateFunc = awaitLoadState;
                 break;
-            case gameStateTitle :
-                currentGameStateFunc = ;
+            case GameStates.Title :
+                currentGameStateFunc = titleState;
                 break;
-            case gameStateNew :
-                currentGameStateFunc = ;
+            case GameStates.New :
+                currentGameStateFunc = newGame;
                 break;
-            case gameStateAwaitMove :
-                currentGameStateFunc = ;
+            case GameStates.AwaitMove :
+                currentGameStateFunc = readMovement;
                 break;
-            case gameStateAnimateMove :
-                currentGameStateFunc = ;
+            case GameStates.AnimateMove :
+                currentGameStateFunc = animatePlayer;
                 break;
-            case gameStateEvaluateMove :
-                currentGameStateFunc = ;
+            case GameStates.EvaluateMove :
+                currentGameStateFunc = verifyMovement;
                 break;
         }
     };
@@ -100,17 +101,65 @@ var Background = function () {
     renderPlayer();
     readMovement();*/
     
-    function gameStateInit () {
+    function awaitLoadState () {
+        // just lets the switch-function call this function as the loading occurs. in other words, its empty.
+    };
+    
+    function initState () {
         tileSheet = new Image();
         tileSheet.src = "../img/tiles.png";
         tileSheet.onload = itemLoad;
+        
+        switchGameState(GameStates.AwaitLoad);
     };
         
     function itemLoad () {
         loadingCount++;
         if (loadingCount >= itemsLeftToLoad) {
-            switchGameState(gameStateTitle);
+            switchGameState(GameStates.Title);
         }
+    };
+    
+    function titleState () {
+        if (screenStart !== true){
+            fillBg();
+            setTitleText();
+            ctx.fillText ("Country Quiz", 250, 150);
+            ctx.fillText ("Press space to start", 240, 200);
+            
+            screenStart = true;
+        } else {
+            // awaits the space click to start the game
+            if (keyReads[32] === true){
+                switchGameState(GameStates.New);
+                screenStart = false;
+            }
+        };
+    };
+    
+    function newGame () {
+        console.log("sdfgsdffs");
+        var playField = [];
+        var items = [];
+        createPlayField();
+        renderMap();
+        
+        switchGameState(GameStates.AwaitMove);
+    };
+    
+    
+    
+    
+    function fillBg () {
+        // fills the bg for title screen etc.
+        ctx.fillStyle = "rgb(214, 193, 32)";
+        ctx.fillRect(0, 0, 600, 400);
+    };
+    
+    function setTitleText () {
+        ctx.fillStyle = "#cddba0";
+        ctx.font = "20px Arial";
+        ctx.textBaseline = "top";
     };
     
     function createPlayField () {   
@@ -191,9 +240,9 @@ var Background = function () {
     };  
     
     function renderMap () {
-        var tilesetImage = new Image();
+        /*var tilesetImage = new Image();
         tilesetImage.src = "../img/tiles.png";
-        tilesetImage.onload = drawImage;
+        tilesetImage.onload = drawImage;*/
         var tileSize = 20;       // The size of a tile (20×20)
         var rowTileCount = 20;   // The number of tiles in a row 
         var colTileCount = 30;   // The number of tiles in a column
@@ -207,26 +256,26 @@ var Background = function () {
                   
                   // renders ground in the background in case its something with a transparent bg
                   if (playField[ r ][ c ] != groundTile){
-                      ctx.drawImage(tilesetImage, 0, 0, 20, 20, c * 20, r * 20, 20, 20);
+                      ctx.drawImage(tileSheet, 0, 0, 20, 20, c * 20, r * 20, 20, 20);
                   }
                   
-                 ctx.drawImage(tilesetImage, (tileCol * tileSize), (tileRow * tileSize), tileSize, tileSize, (c * tileSize), (r * tileSize), tileSize, tileSize); 
+                 ctx.drawImage(tileSheet, (tileCol * tileSize), (tileRow * tileSize), tileSize, tileSize, (c * tileSize), (r * tileSize), tileSize, tileSize); 
               }; 
            };
         };
     }; 
     
     function renderPlayer () {
-        var tilesetImage = new Image();
+       /* var tilesetImage = new Image();
         tilesetImage.src = "../img/tiles.png";
-        tilesetImage.onload = drawImage;
+        tilesetImage.onload = drawImage;*/
         
         function drawImage () {
             var sourceX = (playerTile[Player.currentTile] % 5) | 0; // something aint right.... the array should be a correct number (0)...
             var sourceY = (playerTile[Player.currentTile] / 5) | 0;
             
 //            ctx.fillStyle = "#00ff00"
-            ctx.fillRect(tilesetImage, sourceX, sourceY, 20, 20); 
+            ctx.fillRect(tileSheet, sourceX, sourceY, 20, 20); 
         };
     };
 
@@ -297,4 +346,24 @@ var Background = function () {
         }
     };
     
+    
+    document.body.onkeydown = function (e) {
+        e = e?e:window.event;
+        keyReads[e.keyCode] = true;
+    };
+    
+    document.body.onkeyup = function(e) {
+        e = e?e:window.event;
+        keyReads[e.keyCode] = false;
+    };
+    
+    
+    
+    // launch
+    switchGameState(GameStates.Init);
+    var frameRate = 30;
+    var intervalTime = 1000/frameRate;
+    setInterval(runGame, intervalTime);
 };
+
+window.onload = Game;
