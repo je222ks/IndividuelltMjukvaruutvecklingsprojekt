@@ -170,7 +170,6 @@ var Game = function () {
         fillBg();
         renderMap();
         renderPlayer();
-        console.log("d");
     };
     
     function createPlayField () {   
@@ -193,9 +192,9 @@ var Game = function () {
         for (r = 0; r < 20; r++){
             var tempItemRow = [];
             for (c = 0; c < 30; c++){
-                tempRow.push(0);
+                tempItemRow.push(0);
             }
-            items.push(tempRow);
+            items.push(tempItemRow);
         }
         
         // places trees
@@ -209,6 +208,7 @@ var Game = function () {
                 if (playField[randomRow][randomCol]===groundTile){
                     // add trees to the item array??
                     playField[randomRow][randomCol] = treeTile;
+                    items[randomRow][randomCol] = 1;
                     treeLocFound = true;
                 }
             }
@@ -229,6 +229,7 @@ var Game = function () {
                 // occupies the position in the item-arrray
                 items[randomRow][randomCol] = 1;
                 console.log(Player);
+                console.log(items);
             }
             
         }
@@ -271,10 +272,6 @@ var Game = function () {
     
     function renderPlayer () {    
         ctx.save();
-        
-        ctx.setTransform(1,0,0,1,0,0);
-//        ctx.translate(Player.colPos+10, Player.rowPos+10);
-        
 
         var sourceX = Math.floor(playerTile[Player.currentTile] % 5) * 20;
         var sourceY = Math.floor(playerTile[Player.currentTile] / 5) * 20;
@@ -309,17 +306,17 @@ var Game = function () {
         }
     };
     
-    // sets the outer borders. add tree collision here?
+    // sets the outer borders.
     function verifyMovement (incRow, incCol, obj) {
         obj.nextRowPos = obj.rowPos + incRow;
         obj.nextColPos = obj.colPos + incCol;
         
         // "sets borders"
-        if (obj.nextColPos >= 0 && obj.nextColPos < 30 && obj.nextRowPos >= 0 && obj.nextRowPos < 20){
+        if (obj.nextColPos >= 0 && obj.nextColPos < 30 && obj.nextRowPos >= 0 && obj.nextRowPos < 20 && items[obj.nextRowPos][obj.nextColPos] !== 1){
             obj.deltaX = incCol;
             obj.deltaY = incRow;
             obj.colPos = obj.nextColPos;
-            obj.rowPos = obj.nextRowPos
+            obj.rowPos = obj.nextRowPos;
             
             return true;
             
@@ -334,11 +331,9 @@ var Game = function () {
     function confirmMovement () {
         Player.destinationX = Player.nextColPos * 20;
         Player.destinationY = Player.nextRowPos * 20;
-        console.log("asd");
         switchGameState(GameStates.AnimateMove);
     };
 
-    // state/function looops forever....
     function animatePlayer () {
         Player.x += Player.deltaX*Player.speed;
         Player.y += Player.deltaY*Player.speed;
@@ -348,19 +343,23 @@ var Game = function () {
             Player.currentTile = 0;
         }
 
-//        console.log("a");
-
-        renderPlayField(); // triggers waaaaaaaay too many times. first 10, then infinity. increasing speed to 20 makes first tick 1...
+        renderPlayField();
 
         if (Player.x===Player.destinationX && Player.y===Player.destinationY){
             switchGameState(GameStates.EvaluateMove);
-            console.log(Player.y, Player.destinationY, Player);
         }
     };
     
     function evaluateMovement () {
-        console.log("här");
-        switchGameState(GameStates.AwaitMove);
+        if (playField[Player.rowPos][Player.colPos] === questionTile){
+            // create new state for questions.
+            console.log("hit");
+/*            playField[Player.rowPos][Player.colPos] = groundTile;
+            var questionCounter = 0;
+            questionCounter++;*/
+        } else {
+            switchGameState(GameStates.AwaitMove);
+        }
     };
 
 
