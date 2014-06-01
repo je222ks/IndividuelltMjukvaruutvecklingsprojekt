@@ -55,7 +55,8 @@ var Game = function () {
         New : 30,
         AwaitMove : 40,
         AnimateMove : 50,
-        EvaluateMove : 60
+        VerifyMove : 60,
+        EvaluateMove : 70
     };
     
     var currentGameState = 0;
@@ -88,15 +89,18 @@ var Game = function () {
             case GameStates.AnimateMove :
                 currentGameStateFunc = animatePlayer;
                 break;
-            case GameStates.EvaluateMove :
+            case GameStates.VerifyMove :
                 currentGameStateFunc = verifyMovement;
+                break;
+            case GameStates.EvaluateMove :
+                currentGameStateFunc = evaluateMovement;
                 break;
         }
     };
     
     
     // calls functions for testing purposes.
-    /*createPlayField();
+/*    createPlayField();
     renderMap();
     renderPlayer();
     readMovement();*/
@@ -166,6 +170,7 @@ var Game = function () {
         fillBg();
         renderMap();
         renderPlayer();
+        console.log("d");
     };
     
     function createPlayField () {   
@@ -183,8 +188,7 @@ var Game = function () {
             
             playField.push(tempRow);
         }
-        console.log(playField);
-        
+
         // fills an array to keep track of the items, making sure nothing collides on top of one another.
         for (r = 0; r < 20; r++){
             var tempItemRow = [];
@@ -203,6 +207,7 @@ var Game = function () {
                 randomRow = (Math.random()*20) | 0; // according to this article http://blog.sklambert.com/create-a-canvas-tileset-background/#disqus_thread, the "or" operation is faster then using math.floor here, and therefor im using it.
                 randomCol = (Math.random()*30) | 0;
                 if (playField[randomRow][randomCol]===groundTile){
+                    // add trees to the item array??
                     playField[randomRow][randomCol] = treeTile;
                     treeLocFound = true;
                 }
@@ -221,11 +226,9 @@ var Game = function () {
                 Player.rowPos = randomRow;
                 Player.x = Player.colPos*20;
                 Player.y = Player.rowPos*20; 
-                
-                // temporary since the seperate method wont render it...
-//                playField[randomRow][randomCol] = playerTile[1];
                 // occupies the position in the item-arrray
                 items[randomRow][randomCol] = 1;
+                console.log(Player);
             }
             
         }
@@ -246,47 +249,37 @@ var Game = function () {
     };  
     
     function renderMap () {
-        var tilesetImage = new Image();
-        tilesetImage.src = "../img/tiles.png";
-        tilesetImage.onload = drawImage;
         var tileSize = 20;       // The size of a tile (20×20)
         var rowTileCount = 20;   // The number of tiles in a row 
         var colTileCount = 30;   // The number of tiles in a column
         var imageNumTiles = 5;  // The number of tiles per row in the tileset image
-        function drawImage () {
-           for (var r = 0; r < rowTileCount; r++) {
-              for (var c = 0; c < colTileCount; c++) {
-                 var tile = playField[ r ][ c ];
-                 var tileRow = (tile / imageNumTiles) | 0;
-                 var tileCol = (tile % imageNumTiles) | 0;
-                  
-                  // renders ground in the background in case its something with a transparent bg
-                  if (playField[ r ][ c ] != groundTile){
-                      ctx.drawImage(tileSheet, 0, 0, 20, 20, c * 20, r * 20, 20, 20);
-                  }
-                  
-                 ctx.drawImage(tileSheet, (tileCol * tileSize), (tileRow * tileSize), tileSize, tileSize, (c * tileSize), (r * tileSize), tileSize, tileSize); 
-              }; 
-           };
+       for (var r = 0; r < rowTileCount; r++) {
+          for (var c = 0; c < colTileCount; c++) {
+             var tile = playField[ r ][ c ];
+             var tileRow = (tile / imageNumTiles) | 0;
+             var tileCol = (tile % imageNumTiles) | 0;
+
+              // renders ground in the background in case its something with a transparent bg
+              if (playField[ r ][ c ] != groundTile){
+                  ctx.drawImage(tileSheet, 0, 0, 20, 20, c * 20, r * 20, 20, 20);
+              }
+
+             ctx.drawImage(tileSheet, (tileCol * tileSize), (tileRow * tileSize), tileSize, tileSize, (c * tileSize), (r * tileSize), tileSize, tileSize); 
+          }; 
         };
     }; 
     
-    function renderPlayer () {
-        var tilesetImage = new Image();
-        tilesetImage.src = "../img/tiles.png";
-        tilesetImage.onload = drawImage;
-        
+    function renderPlayer () {    
         ctx.save();
         
         ctx.setTransform(1,0,0,1,0,0);
-        ctx.translate(Player.colPos+10, Player.rowPos+10);
+//        ctx.translate(Player.colPos+10, Player.rowPos+10);
         
-        function drawImage () {
-            var sourceX = Math.floor(playerTile[Player.currentTile] % 5) * 20;
-            var sourceY = Math.floor(playerTile[Player.currentTile] / 5) * 20;
-            
-            ctx.drawImage(tilesetImage, sourceX, sourceY, 20, 20, Player.colPos * 20, Player.rowPos * 20, 20, 20); 
-        };
+
+        var sourceX = Math.floor(playerTile[Player.currentTile] % 5) * 20;
+        var sourceY = Math.floor(playerTile[Player.currentTile] / 5) * 20;
+
+        ctx.drawImage(tileSheet, sourceX, sourceY, 20, 20, Player.colPos * 20, Player.rowPos * 20, 20, 20); 
         
         ctx.restore();
     };
@@ -316,6 +309,7 @@ var Game = function () {
         }
     };
     
+    // sets the outer borders. add tree collision here?
     function verifyMovement (incRow, incCol, obj) {
         obj.nextRowPos = obj.rowPos + incRow;
         obj.nextColPos = obj.colPos + incCol;
@@ -324,10 +318,11 @@ var Game = function () {
         if (obj.nextColPos >= 0 && obj.nextColPos < 30 && obj.nextRowPos >= 0 && obj.nextRowPos < 20){
             obj.deltaX = incCol;
             obj.deltaY = incRow;
-            
-            // add "rotation" at least to some degree, 0 and 180 minimum for movement to the right and left.
+            obj.colPos = obj.nextColPos;
+            obj.rowPos = obj.nextRowPos
             
             return true;
+            
         } else {
             obj.nextColPos = obj.colPos;
             obj.nextRowPos = obj.rowPos;
@@ -339,41 +334,49 @@ var Game = function () {
     function confirmMovement () {
         Player.destinationX = Player.nextColPos * 20;
         Player.destinationY = Player.nextRowPos * 20;
+        console.log("asd");
         switchGameState(GameStates.AnimateMove);
     };
-    
+
+    // state/function looops forever....
     function animatePlayer () {
         Player.x += Player.deltaX*Player.speed;
         Player.y += Player.deltaY*Player.speed;
         Player.currentTile++;
-        
+
         if (Player.currentTile === playerTile.length){
             Player.currentTile = 0;
         }
-        
-        renderMap();
-        
+
+//        console.log("a");
+
+        renderPlayField(); // triggers waaaaaaaay too many times. first 10, then infinity. increasing speed to 20 makes first tick 1...
+
         if (Player.x===Player.destinationX && Player.y===Player.destinationY){
-            switchGameState(GameStates.AwaitMove);
+            switchGameState(GameStates.EvaluateMove);
+            console.log(Player.y, Player.destinationY, Player);
         }
     };
     
-    
-    document.body.onkeydown = function (e) {
-        e = e?e:window.event;
+    function evaluateMovement () {
+        console.log("här");
+        switchGameState(GameStates.AwaitMove);
+    };
+
+
+    document.onkeydown = function (e) {
         keyReads[e.keyCode] = true;
     };
-    
-    document.body.onkeyup = function(e) {
-        e = e?e:window.event;
+
+    document.onkeyup = function(e) {
         keyReads[e.keyCode] = false;
     };
-    
-    
-    
+
+
+
     // launch
     switchGameState(GameStates.Init);
-    var frameRate = 30;
+    var frameRate = 30; 
     var intervalTime = 1000/frameRate;
     setInterval(runGame, intervalTime);
 };
