@@ -353,7 +353,6 @@ var Game = function () {
     function evaluateMovement () {
         if (playField[Player.rowPos][Player.colPos] === questionTile){
             // create new state for questions.
-            console.log("hit");
 /*            playField[Player.rowPos][Player.colPos] = groundTile;
             var questionCounter = 0;
             questionCounter++;*/
