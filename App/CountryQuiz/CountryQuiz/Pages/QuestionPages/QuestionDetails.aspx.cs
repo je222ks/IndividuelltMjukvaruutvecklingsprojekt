@@ -43,7 +43,7 @@ namespace CountryQuiz.Pages.QuestionPages
                 Service.DeleteQuestion(id);
 
                 Page.SetTempData("SuccessMessage", "The question has been removed.");
-                Response.RedirectToRoute("QuestionList");
+                Response.RedirectToRoute("Questions");
                 Context.ApplicationInstance.CompleteRequest();
             }
             catch
@@ -69,7 +69,7 @@ namespace CountryQuiz.Pages.QuestionPages
                     Service.SaveQuestion(question);
 
                     Page.SetTempData("SuccessMessage", "The question has beed updated.");
-                    Response.RedirectToRoute("QuestionList");
+                    Response.RedirectToRoute("Questions");
                     Context.ApplicationInstance.CompleteRequest();
                 }
             }
