@@ -60,6 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="Pages\Game.aspx" />
     <Content Include="Pages\QuestionPages\CreateQuestion.aspx" />
     <Content Include="Pages\QuestionPages\QuestionDetails.aspx" />
     <Content Include="Pages\QuestionPages\QuestionList.aspx" />
@@ -67,6 +69,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Infrastructure\PageExtensions.cs" />
+    <Compile Include="App_Infrastructure\ValidationExtension.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -74,10 +79,20 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="Model\DAL\DALBase.cs" />
     <Compile Include="Model\DAL\QuestionDAL.cs" />
     <Compile Include="Model\Question.cs" />
     <Compile Include="Model\Service.cs" />
+    <Compile Include="Pages\Game.aspx.cs">
+      <DependentUpon>Game.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Game.aspx.designer.cs">
+      <DependentUpon>Game.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\QuestionPages\CreateQuestion.aspx.cs">
       <DependentUpon>CreateQuestion.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

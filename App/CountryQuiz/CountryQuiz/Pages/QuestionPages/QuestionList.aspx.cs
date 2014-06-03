@@ -1,10 +1,10 @@
-﻿using CountryQuiz.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using CountryQuiz.Model;
 
 namespace CountryQuiz.Pages.QuestionPages
 {
@@ -12,7 +12,8 @@ namespace CountryQuiz.Pages.QuestionPages
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            SuccessMessageLiteral.Text = Page.GetTempData("SuccessMessage") as string;
+            SuccessMessagePanel.Visible = !String.IsNullOrWhiteSpace(SuccessMessageLiteral.Text);
         }
 
         public IEnumerable<Question> QuestionListView_GetData()

@@ -1,6 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Site.Master" AutoEventWireup="true" CodeBehind="QuestionList.aspx.cs" Inherits="CountryQuiz.Pages.QuestionPages.QuestionList" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <h1>Available questions</h1>
+        <asp:Panel runat="server" ID="SuccessMessagePanel" Visible="false">
+        <asp:Literal runat="server" ID="SuccessMessageLiteral" />
+    </asp:Panel>
     <asp:ListView ID="QuestionListView" runat="server"
         ItemType="CountryQuiz.Model.Question"
         SelectMethod="QuestionListView_GetData"
@@ -14,7 +17,7 @@
         <ItemTemplate>
             <li>
                 <%-- Add navurl route    NavigateUrl='<%# GetRouteUrl("TripDetails", new { id = Item.QuestionID }) %>' --%>
-                <asp:HyperLink runat="server" Text='<%# Item.QuestionTitle %>'></asp:HyperLink>
+                <asp:HyperLink runat="server" Text='<%# Item.QuestionTitle %>' NavigateUrl='<%# GetRouteUrl("QuestionDetails", new { id = Item.QuestionID }) %>'></asp:HyperLink>
             </li>
         </ItemTemplate>
         <EmptyItemTemplate>

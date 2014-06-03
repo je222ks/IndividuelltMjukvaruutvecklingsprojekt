@@ -1,8 +1,10 @@
 ﻿using CountryQuiz.Model.DAL;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using CountryQuiz.App_Infrastructure;
 
 namespace CountryQuiz.Model
 {
@@ -37,14 +39,14 @@ namespace CountryQuiz.Model
 
         public void SaveQuestion(Question question)
         {
-            // Validering
-            //ICollection<ValidationResult> validationResults;
-            //if (!question.Validate(out validationResults))
-            //{
-            //    var ex = new ValidationException("The object did not pass the validation.");
-            //    ex.Data.Add("ValidationResults", validationResults);
-            //    throw ex;
-            //}
+             // Validering
+            ICollection<ValidationResult> validationResults;
+            if (!question.Validate(out validationResults))
+            {
+                var ex = new ValidationException("Objektet klarade inte valideringen.");
+                ex.Data.Add("ValidationResults", validationResults);
+                throw ex;
+            }
 
             if (question.QuestionID == 0)
             {
