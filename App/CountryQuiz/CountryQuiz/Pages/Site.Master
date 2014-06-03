@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="CountryQuiz.Pages.Site" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="CountryQuiz.Pages.Site" ViewStateMode="Disabled" %>
 
 <!DOCTYPE html>
 

@@ -60,7 +60,7 @@ namespace CountryQuiz.Model.DAL
                             return new Question
                             {
                                 QuestionID = reader.GetInt32(questionIdIndex),
-                                Question = reader.GetString(questionIndex),
+                                QuestionTitle = reader.GetString(questionIndex),
                                 AnswerOption1 = reader.GetString(answerOption1Index),
                                 AnswerOption2 = reader.GetString(answerOption2Index),
                                 AnswerOption3 = reader.GetString(answerOption3Index),
@@ -109,7 +109,7 @@ namespace CountryQuiz.Model.DAL
                             questions.Add(new Question
                             {
                                 QuestionID = reader.GetInt32(questionIdIndex),
-                                Question = reader.GetString(questionIndex),
+                                QuestionTitle = reader.GetString(questionIndex),
                                 AnswerOption1 = reader.GetString(answerOption1Index),
                                 AnswerOption2 = reader.GetString(answerOption2Index),
                                 AnswerOption3 = reader.GetString(answerOption3Index),
@@ -141,7 +141,7 @@ namespace CountryQuiz.Model.DAL
 
                     Random random = new Random();
 
-                    cmd.Parameters.Add("@Question", SqlDbType.VarChar, 100).Value = question.Question;
+                    cmd.Parameters.Add("@Question", SqlDbType.VarChar, 100).Value = question.QuestionTitle;
                     cmd.Parameters.Add("@AnswerOption1", SqlDbType.VarChar, 50).Value = question.AnswerOption1;
                     cmd.Parameters.Add("@AnswerOption2", SqlDbType.VarChar, 50).Value = question.AnswerOption2;
                     cmd.Parameters.Add("@AnswerOption3", SqlDbType.VarChar, 50).Value = question.AnswerOption3;
@@ -170,7 +170,7 @@ namespace CountryQuiz.Model.DAL
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.Add("@QuestionID", SqlDbType.Int, 4).Value = question.QuestionID;
-                    cmd.Parameters.Add("@Question", SqlDbType.VarChar, 100).Value = question.Question;
+                    cmd.Parameters.Add("@Question", SqlDbType.VarChar, 100).Value = question.QuestionTitle;
                     cmd.Parameters.Add("@AnswerOption1", SqlDbType.VarChar, 50).Value = question.AnswerOption1;
                     cmd.Parameters.Add("@AnswerOption2", SqlDbType.VarChar, 50).Value = question.AnswerOption2;
                     cmd.Parameters.Add("@AnswerOption3", SqlDbType.VarChar, 50).Value = question.AnswerOption3;
