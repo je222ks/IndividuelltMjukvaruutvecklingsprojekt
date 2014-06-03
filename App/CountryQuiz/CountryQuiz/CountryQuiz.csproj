@@ -61,6 +61,9 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="js\game.js" />
+    <Content Include="js\player.js" />
+    <Content Include="main.css" />
     <Content Include="Pages\Game.aspx" />
     <Content Include="Pages\QuestionPages\CreateQuestion.aspx" />
     <Content Include="Pages\QuestionPages\QuestionDetails.aspx" />
@@ -133,7 +136,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="img\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
