@@ -1,5 +1,6 @@
 ﻿#gamecont {
-    border: 1px solid black;
+    border: 2px solid #00955e;
+    margin: 23px;
     width: 600px;
     height: 400px;
 }
@@ -14,12 +15,6 @@ body {
     width: 650px;
     display: block;
     height: auto;
-}
-
-#gamecont {
-    border: 2px solid #00955e;
-    
-    margin: 23px;
 }
 
 #info {

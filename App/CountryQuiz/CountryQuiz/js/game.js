@@ -130,6 +130,7 @@ var Game = function () {
             setTitleText();
             ctx.fillText("Country Quiz", 250, 150);
             ctx.fillText("Press space to start", 240, 200);
+            // make a proper title screen...
 
             screenStart = true;
         } else {

@@ -26,7 +26,7 @@ namespace CountryQuiz.Pages.QuestionPages
         {
             // checks if any option match the correct answer
 
-            if (String.Compare(question.CorrectAnswer, question.AnswerOption1) == 0 || String.Compare(question.CorrectAnswer, question.AnswerOption2) == 0 || String.Compare(question.CorrectAnswer, question.AnswerOption3) == 0 || String.Compare(question.CorrectAnswer, question.AnswerOption4) == 0)
+            if (String.Compare(question.CorrectAnswer.ToUpper(), question.AnswerOption1.ToUpper()) == 0 || String.Compare(question.CorrectAnswer.ToUpper(), question.AnswerOption2.ToUpper()) == 0 || String.Compare(question.CorrectAnswer.ToUpper(), question.AnswerOption3.ToUpper()) == 0 || String.Compare(question.CorrectAnswer.ToUpper(), question.AnswerOption4.ToUpper()) == 0)
             {
                 if (ModelState.IsValid)
                 {
