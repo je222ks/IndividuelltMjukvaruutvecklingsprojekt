@@ -128,8 +128,8 @@ var Game = function () {
         if (screenStart !== true) {
             fillBg();
             setTitleText();
-            ctx.fillText("Country Quiz", 250, 150);
-            ctx.fillText("Press space to start", 240, 200);
+            ctx.fillText("Country Quiz", 245, 150);
+            ctx.fillText("Press space to start", 215, 200);
             // make a proper title screen...
 
             screenStart = true;
@@ -157,12 +157,12 @@ var Game = function () {
 
     function fillBg() {
         // fills the bg for title screen etc.
-        ctx.fillStyle = "rgb(214, 193, 32)";
+        ctx.fillStyle = "#d8c98c";
         ctx.fillRect(0, 0, 600, 400);
     }
 
     function setTitleText() {
-        ctx.fillStyle = "#cddba0";
+        ctx.fillStyle = "#000000";
         ctx.font = "20px Arial";
         ctx.textBaseline = "top";
     }

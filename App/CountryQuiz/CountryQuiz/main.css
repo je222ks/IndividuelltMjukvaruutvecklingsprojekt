@@ -1,5 +1,5 @@
 ﻿#gamecont {
-    border: 2px solid #00955e;
+    border: 2px solid #000000;
     margin: 23px;
     width: 600px;
     height: 400px;
@@ -7,11 +7,14 @@
 
 body {
     background-color: #b2a366;
+    text-align: center;
 }
 
 #container {
     margin: 0 auto;
+    margin-top: 0;
     background-color: #d7c88b;
+    background: url(img/texture.png);
     width: 650px;
     display: block;
     height: auto;
@@ -19,4 +22,101 @@ body {
 
 #info {
     padding: 25px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.cmdBtn {
+    text-decoration : underline;
+    padding: 20px;
+    text-align: center;
+    margin-top: 25px;
+    font-size: 20px;
+    letter-spacing: 1px;
+    display: block;
+    color: black;
+}
+
+.cmdBtn:hover {
+    font-weight: bold;
+}
+
+.txtBox {
+    width: 300px;
+    height: 50px;
+    padding: 5px;
+    border-radius: 2px;
+    margin: 10px;
+}
+
+.input {
+    padding: 5px;
+    border-radius: 2px;
+    width: 300px;
+    margin: 10px;
+}
+
+.lbl {
+    padding: 10px;
+    margin: 0 auto;
+    text-align: center;
+    text-decoration: underline;
+    font-size: 17px;
+}
+
+p {
+    padding: 10px;
+    margin: 10px;
+    display: block;
+}
+
+#logo {
+    margin: 0 auto;
+    display: block;
+}
+
+#menu {
+    margin: 0 auto;
+    text-align: center;
+    display:block;
+    margin-top: 25px;
+}
+
+.menuOpt {
+    padding: 10px;
+    margin: 10px;
+    color: black;
+    font-size: 18px;
+}
+
+.liItm {
+    padding: 10px;
+    margin: 10px;
+    color: black;
+    list-style-type: none;
+    text-align: center;
+    margin: 0 auto;
+    text-decoration: none;
+    display: block;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0 auto;
+    text-align: center;
+}
+
+h1, h2, h3 {
+    text-align: center;
+    font-family: Arial;
+}
+
+.error {
+    text-align: center;
+    color: darkred;
+}
+
+.success {
+    text-align: center;
+    color: darkgreen;
 }
