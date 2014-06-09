@@ -44,6 +44,10 @@ namespace CountryQuiz.Pages.QuestionPages
                     }
                 }
             }
+            else 
+            {
+                ModelState.AddModelError(String.Empty, "None of the entered answer options match the correct answer!.");
+            }
 
 
         }

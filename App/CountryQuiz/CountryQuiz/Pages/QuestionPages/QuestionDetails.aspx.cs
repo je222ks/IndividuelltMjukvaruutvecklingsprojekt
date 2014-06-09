@@ -64,14 +64,24 @@ namespace CountryQuiz.Pages.QuestionPages
                     return;
                 }
 
-                if (TryUpdateModel(question))
-                {
-                    Service.SaveQuestion(question);
 
-                    Page.SetTempData("SuccessMessage", "The question has beed updated.");
-                    Response.RedirectToRoute("Questions");
-                    Context.ApplicationInstance.CompleteRequest();
-                }
+
+                    if (TryUpdateModel(question))
+                    {
+                        if (String.Compare(question.CorrectAnswer.ToUpper(), question.AnswerOption1.ToUpper()) == 0 || String.Compare(question.CorrectAnswer.ToUpper(), question.AnswerOption2.ToUpper()) == 0 || String.Compare(question.CorrectAnswer.ToUpper(), question.AnswerOption3.ToUpper()) == 0 || String.Compare(question.CorrectAnswer.ToUpper(), question.AnswerOption4.ToUpper()) == 0)
+                        {
+
+                            Service.SaveQuestion(question);
+
+                            Page.SetTempData("SuccessMessage", "The question has beed updated.");
+                            Response.RedirectToRoute("Questions");
+                            Context.ApplicationInstance.CompleteRequest();
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(String.Empty, "None of the entered answer options match the correct answer!.");
+                        }
+                    }
             }
             catch
             {

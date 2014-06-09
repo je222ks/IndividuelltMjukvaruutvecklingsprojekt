@@ -59,6 +59,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="game.js" />
     <Content Include="Global.asax" />
     <Content Include="js\game.js" />
     <Content Include="js\player.js" />
@@ -119,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Pages\Site.Master" />
+    <None Include="Properties\PublishProfiles\MyProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

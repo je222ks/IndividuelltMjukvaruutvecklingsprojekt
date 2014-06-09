@@ -38,16 +38,7 @@ var Game = function () {
     // screens 
     var screenStart = false;
 
-
-    // puts the app in various states
-    /*    var gameStateInit = 0;
-        var gameStateAwaitLoad = 10;
-        var gameStateTitle = 20;
-        var gameStateNew = 30;
-        var gameStateAwaitMove = 40;
-        var gameStateAnimateMove = 50;
-        var gameStateEvaluateMove = 60;*/
-
+    // game states. i found this way of approach quite interesting.
     var GameStates = {
         Init: 0,
         AwaitLoad: 10,
@@ -67,7 +58,7 @@ var Game = function () {
         currentGameStateFunc();
     }
 
-
+    // switched the states
     function switchGameState(state) {
         currentGameState = state;
         switch (currentGameState) {
@@ -111,7 +102,7 @@ var Game = function () {
 
     function initState() {
         tileSheet = new Image();
-        tileSheet.src = "../img/tiles.png";
+        tileSheet.src = "/tiles.png";
         tileSheet.onload = itemLoad;
 
         switchGameState(GameStates.AwaitLoad);
@@ -143,7 +134,6 @@ var Game = function () {
     }
 
     function newGame() {
-        console.log("sdfgsdffs");
         var playField = [];
         var items = [];
         createPlayField();
@@ -251,10 +241,10 @@ var Game = function () {
     }
 
     function renderMap() {
-        var tileSize = 20;       // The size of a tile (20×20)
-        var rowTileCount = 20;   // The number of tiles in a row 
-        var colTileCount = 30;   // The number of tiles in a column
-        var imageNumTiles = 5;  // The number of tiles per row in the tileset image
+        var tileSize = 20;     
+        var rowTileCount = 20;  
+        var colTileCount = 30;   
+        var imageNumTiles = 5;  
         for (var r = 0; r < rowTileCount; r++) {
             for (var c = 0; c < colTileCount; c++) {
                 var tile = playField[r][c];
@@ -352,14 +342,14 @@ var Game = function () {
     }
 
     function evaluateMovement() {
-        if (playField[Player.rowPos][Player.colPos] === questionTile) {
-            // create new state for questions.
-            /*            playField[Player.rowPos][Player.colPos] = groundTile;
-                        var questionCounter = 0;
-                        questionCounter++;*/
-        } else {
-            switchGameState(GameStates.AwaitMove);
-        }
+        //if (playField[Player.rowPos][Player.colPos] === questionTile) {
+        //    
+        //} else {
+        //    switchGameState(GameStates.AwaitMove);
+        //}
+
+        // further development for questions etc.
+        switchGameState(GameStates.AwaitMove);
     }
 
 

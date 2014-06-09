@@ -11,9 +11,9 @@
     <form id="form1" runat="server">
     <div id="container">
         <header>
-            <img src="../img/logo.png" id="logo" />
+            <img src="/img/logo.png" id="logo" />
             <div id="menu">
-                <asp:HyperLink ID="HyperLink4" CssClass="menuOpt" runat="server" Text="Game" NavigateUrl='<%$ RouteUrl:routename=Default %>'></asp:HyperLink>
+                <asp:HyperLink ID="HyperLink4" CssClass="menuOpt" runat="server" Text="Play the game" NavigateUrl='<%$ RouteUrl:routename=Default %>'></asp:HyperLink>
                 <asp:HyperLink ID="HyperLink1" CssClass="menuOpt" runat="server" Text="Question listings" NavigateUrl='<%$ RouteUrl:routename=Questions %>'></asp:HyperLink>
                 <asp:HyperLink ID="HyperLink2" CssClass="menuOpt" runat="server" Text="Add new questions" NavigateUrl='<%$ RouteUrl:routename=AddQuestion %>'></asp:HyperLink>
             </div>

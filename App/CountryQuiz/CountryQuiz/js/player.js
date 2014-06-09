@@ -1,5 +1,5 @@
 ﻿"use strict";
-
+// player object, could have been placed in the other file...
 var Player = {
     rowPos: 0,
     colPos: 0,
