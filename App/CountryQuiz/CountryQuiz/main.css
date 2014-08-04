@@ -14,7 +14,7 @@ body {
     margin: 0 auto;
     margin-top: 0;
     background-color: #d7c88b;
-    background: url(img/texture.png);
+    background: url(~/img/texture.png);
     width: 650px;
     display: block;
     height: auto;

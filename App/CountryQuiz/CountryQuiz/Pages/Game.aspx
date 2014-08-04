@@ -19,5 +19,5 @@
         </div>
 
         <script src="/js/player.js"></script>
-        <script src="/game.js"></script>
+        <script src="/js/game.js"></script>
 </asp:Content>
